@@ -1,0 +1,39 @@
+.navbar {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+}
+
+.navcontent {
+    background: rgba(200, 200, 200, 0.8);
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    width: max-content;
+    z-index: 3;
+    position: relative;
+    opacity: .1;
+    transition: opacity .2s ease-out;
+}
+
+.navcontent:hover {
+    opacity: 1;
+}
+
+.navbar button {
+    display: block;
+    height: 40px;
+    width: 40px;
+    border: none;
+    background: transparent;
+    color: slategray;
+}
+
+.separator {
+    width: 2px;
+    border-left: 1px solid gray;
+    height: 70%;
+    display: inline-block;
+    margin: auto;
+}

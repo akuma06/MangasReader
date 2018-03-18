@@ -1,0 +1,39 @@
+.navimgcontainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+}
+
+.navbutton {
+    height: 70px;
+    padding: 5px;
+    background: gainsboro;
+    border: 0;
+}
+
+.navimg {
+    overflow-x: hidden;
+    height: 100%;
+    padding: 1em;
+    background: dimgrey;
+}
+
+.navimg a:first-child {
+    margin-top: 1em;
+}
+
+.navimg a {
+    border-bottom: 1px solid black;
+    padding: 0.25em 0;
+}
+
+.navimg a:last-child {
+    border: 0;
+    padding-bottom: 0;
+}
+
+.hide {
+    display: none;
+}
