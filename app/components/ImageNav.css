@@ -1,0 +1,35 @@
+.item {
+    height: 100px;
+    width: 100px;
+    text-decoration: none;
+    border: 0;
+    display: block;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.item img {
+    display: block;
+    margin: auto;
+    height: 75px;
+}
+
+.item p {
+    padding: 0;
+    padding-top: 5px;
+    overflow: hidden;
+    width: 100%;
+    height: 20px;
+    font-size: 18px;
+    margin: 0;
+    text-align: center;
+}
+
+.selected {
+    border:1px solid gray;
+    background: gray;
+}
+
+.selected p {
+    font-weight: bold;
+}

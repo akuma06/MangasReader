@@ -1,5 +1,5 @@
 // @flow
-import { app, Menu, shell, BrowserWindow } from 'electron';
+import { app, Menu, shell, BrowserWindow, dialog } from 'electron';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -116,9 +116,6 @@ export default class MenuBuilder {
     const templateDefault = [{
       label: '&File',
       submenu: [{
-        label: '&Open',
-        accelerator: 'Ctrl+O'
-      }, {
         label: '&Close',
         accelerator: 'Ctrl+W',
         click: () => {
@@ -155,24 +152,20 @@ export default class MenuBuilder {
     }, {
       label: 'Help',
       submenu: [{
-        label: 'Learn More',
+        label: 'About Me',
         click() {
-          shell.openExternal('http://electron.atom.io');
+          shell.openExternal('https://akuma06.tk');
         }
       }, {
-        label: 'Documentation',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
-        }
-      }, {
-        label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+        label: 'About Manga Reader',
+        click: () => {
+          dialog.showMessageBox(this.mainWindow, {
+            type: 'info',
+            title: 'About Manga Reader',
+            message: `Manga Reader is a program that lets you read your mangas offline.\n
+            Manga Reader - version ${app.getVersion()}\n
+            All credits to akuma06 Ⓒ2018.`
+          });
         }
       }]
     }];

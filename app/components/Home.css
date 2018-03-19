@@ -1,14 +1,33 @@
 .container {
-  position: absolute;
-  top: 30%;
-  left: 10px;
-  text-align: center;
+  padding: 3em;
+}
+
+.container > div {
+  width: 100%;
+  height: 100%;
+  background: rgba(230, 230, 230, 0.7);
+  border-radius: 1em;
+  padding: 1em;
 }
 
 .container h2 {
   font-size: 5rem;
+  border-bottom: 2px solid gray;
 }
 
 .container a {
   font-size: 1.4rem;
+}
+
+.navbuttons {
+  text-align: right;
+}
+
+.navbuttons button {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.navbuttons button i {
+  margin-right: 3px;
 }
