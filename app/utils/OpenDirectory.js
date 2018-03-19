@@ -60,7 +60,6 @@ function ImportDirectory(callback: (folderPath: string) => void) {
       properties: ['openDirectory']
     },
     (fileNames) => {
-      console.log(fileNames);
       if (fileNames === undefined) return;
       const fileName = fileNames[0];
       callback(fileName);

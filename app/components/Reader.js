@@ -118,7 +118,6 @@ export default class Reader extends Component<Props> {
           </div>
         );
       default:
-        console.log('End of chapter');
         return (
           <p>End of chapter</p>
         );

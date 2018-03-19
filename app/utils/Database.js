@@ -19,10 +19,8 @@ function GetBooks(callback) {
     },
     sort: [{ date: 'desc' }],
     limit: 10
-  }).then((result) => {
-    console.log(result.docs);
-    return callback(result.docs);
-  }).catch((err) => console.log(err))).catch((err) => {
+  }).then((result) => callback(result.docs))
+    .catch((err) => console.log(err))).catch((err) => {
     console.log(err);
   });
 }
