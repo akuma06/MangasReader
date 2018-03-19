@@ -2,34 +2,16 @@
 import React, { Component } from 'react';
 import { remote } from 'electron';
 import styles from './Reader.css';
-import { history } from '../store/configureStore';
 import ReadDirectory from '../utils/ReadDirectory';
 import NavBar from './NavBar';
 import ChapterNav from './ChapterNav';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
 import { AddBook, UpdateRead, GetReadingState } from '../utils/Database';
 
-type Props = {};
-
-function handleOpenDir() {
-  OpenDirectory((folderPath) => callbackAfterOpen(folderPath));
-}
-
-function handleImportDir() {
-  ImportDirectory((folderPath) => callbackAfterOpen(folderPath));
-}
-
-function callbackAfterOpen(folderPath: string) {
-  AddBook(folderPath);
-  GetReadingState(folderPath, (readState) => {
-    let chapter = 0;
-    let index = 0;
-    if (readState !== undefined) {
-      ({ index, chapter } = readState);
-    }
-    history.push('/reader', { folderPath, chapter, index });
-  });
-}
+type Props = {
+  location: object,
+  history: object
+};
 
 export default class Reader extends Component<Props> {
   props: Props;
@@ -52,21 +34,43 @@ export default class Reader extends Component<Props> {
     document.body.addEventListener('keydown', this.keydownhandler.bind(this));
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if ((prevState.index !== this.state.index
-      || prevState.chapter !== this.state.chapter)
+  componentDidUpdate(prevProps) {
+    if ((prevProps.location.state.folderPath === this.props.location.state.folderPath)
       && (this.state.chapter > 0
       || (this.state.index > 0 && this.state.chapter === 0))) {
-      UpdateRead(history.location.state.folderPath, this.state.chapter, this.state.index);
+      UpdateRead(this.props.location.state.folderPath, this.state.chapter, this.state.index);
+    }
+    if (prevProps.location.state.folderPath !== this.props.location.state.folderPath) {
+      this.handleReadDirectory();
     }
   }
+
 
   componentWillUnmount() {
     document.body.removeEventListener('keydown', this.keydownhandler.bind(this));
   }
+  handleOpenDir() {
+    OpenDirectory((folderPath) => this.callbackAfterOpen(folderPath));
+  }
+
+  handleImportDir() {
+    ImportDirectory((folderPath) => this.callbackAfterOpen(folderPath));
+  }
+
+  callbackAfterOpen(folderPath: string) {
+    AddBook(folderPath);
+    GetReadingState(folderPath, (readState) => {
+      let chapter = 0;
+      let index = 0;
+      if (readState !== undefined) {
+        ({ index, chapter } = readState);
+      }
+      this.props.history.push('/reader', { folderPath, chapter, index });
+    });
+  }
 
   handleReadDirectory() {
-    ReadDirectory(history.location.state.folderPath, (files: Array) => {
+    ReadDirectory(this.props.location.state.folderPath, (files: Array) => {
       let notchapters = false;
       const indchapters = [];
       const l = files.length;
@@ -82,8 +86,8 @@ export default class Reader extends Component<Props> {
       } else {
         this.setState({ files });
       }
-      const index = (history.location.state.index) ? history.location.state.index : 0;
-      const chapter = (history.location.state.chapter) ? history.location.state.chapter : 0;
+      const index = (this.props.location.state.index) ? this.props.location.state.index : 0;
+      const chapter = (this.props.location.state.chapter) ? this.props.location.state.chapter : 0;
       this.setIndex(index, chapter);
     });
   }
@@ -281,8 +285,8 @@ export default class Reader extends Component<Props> {
             onexpand={this.fullscreen.bind(this)}
             onplus={this.zoomplus.bind(this)}
             onminus={this.zoomdown.bind(this)}
-            onopen={handleOpenDir}
-            onopenf={handleImportDir}
+            onopen={this.handleOpenDir.bind(this)}
+            onopenf={this.handleImportDir.bind(this)}
           />
           <ChapterNav
             onchange={this.handlerChangeIndex.bind(this)}

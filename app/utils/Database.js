@@ -19,10 +19,10 @@ function GetBooks(callback) {
     },
     sort: [{ date: 'desc' }],
     limit: 10
-  }).then((result) => callback(result.docs))
-    .catch((err) => console.log(err))).catch((err) => {
-    console.log(err);
-  });
+  })
+    .then((result) => callback(result.docs))
+    .catch((err) => console.log(err)))
+    .catch((err) => console.log(err));
 }
 
 function AddBook(folderPath) {
@@ -32,25 +32,26 @@ function AddBook(folderPath) {
   const chapters = uniTitle.replace(/^.*(?:c|ch|chapter){1}([0-9-]+).*$/gi, '$1');
   db.get(uniTitle)
     .then((doc) => {
-      if (doc !== undefined) {
-        const document = doc;
-        document.date = new Date().getTime();
-        return db.put(document);
-      }
-      return db.put({
-        _id: uniTitle,
-        title,
-        folderPath,
-        volume,
-        chapters,
-        reading: {
-          chapter: 0,
-          index: 0
-        },
-        date: new Date().getTime()
-      });
+      if (doc === undefined) return;
+      document.date = new Date().getTime();
+      return db.put(document);
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      if (e.status === 404) {
+        return db.put({
+          _id: uniTitle,
+          title,
+          folderPath,
+          volume,
+          chapters,
+          reading: {
+            chapter: 0,
+            index: 0
+          },
+          date: new Date().getTime()
+        });
+      }
+    });
 }
 
 function UpdateRead(folderPath: string, chapter: number, index: number) {
@@ -72,7 +73,12 @@ function GetReadingState(folderPath: string, done: (reading) => void) {
   const uniTitle = uniformize(title);
   db.get(uniTitle)
     .then((doc) => done(doc.reading))
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      if (e.status === 404) {
+        return done({ chapter: 0, index: 0 });
+      }
+      console.log(e);
+    });
 }
 
 export default {

@@ -1,15 +1,26 @@
 // @flow
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Reader from '../components/Reader';
 
-type Props = {};
+type Props = {
+  match: object,
+  location: object,
+  history: object
+};
 
-export default class ReaderPage extends Component<Props> {
+class ReaderPage extends Component<Props> {
   props: Props;
 
   render() {
     return (
-      <Reader />
+      <Reader
+        match={this.props.match}
+        location={this.props.location}
+        history={this.props.history}
+      />
     );
   }
 }
+
+export default withRouter(ReaderPage);

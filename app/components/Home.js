@@ -40,7 +40,7 @@ export default class Home extends Component<Props> {
           <ul>
             {this.state.books.map((book) => (
               <li key={book.id}>
-                <Link to={{ pathname: '/reader', state: { folderPath: book.folderPath } }}>{book.title}</Link>
+                <Link key={`link_${book.id}`} to={{ pathname: '/reader', state: { folderPath: book.folderPath } }}>{book.title}</Link>
               </li>))}
           </ul>
           <div className={styles.navbuttons}>

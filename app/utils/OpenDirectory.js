@@ -5,7 +5,7 @@ import unrar from 'node-unrar-js';
 import path from 'path';
 
 function isArchive(fileName: string) {
-  return fileName.match(/[zip|rar]$/i);
+  return fileName.match(/(?:zip|rar)$/i);
 }
 
 function isRar(fileName: string) {
