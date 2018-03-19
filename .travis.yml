@@ -40,3 +40,4 @@ script:
   - yarn package
   - yarn test
   - yarn test-e2e
+  - yarn dist
