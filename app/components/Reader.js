@@ -2,18 +2,30 @@
 import React, { Component } from 'react';
 import { remote } from 'electron';
 import styles from './Reader.css';
-import ReadDirectory from '../utils/ReadDirectory';
+import { ReadDirectory, File } from '../utils/ReadDirectory';
 import NavBar from './NavBar';
 import ChapterNav from './ChapterNav';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
-import { AddBook, UpdateRead, GetReadingState } from '../utils/Database';
+import { AddBook, UpdateRead, GetBook, Book } from '../utils/Database';
 
 type Props = {
   location: object,
   history: object
 };
+type State = {
+  files: Array<File>,
+  index: number,
+  chapter: number,
+  indchapters: Array<number>,
+  startX: number,
+  startY: number,
+  increment: number,
+  images: Array,
+  book: Book,
+  zoom: number
+};
 
-export default class Reader extends Component<Props> {
+export default class Reader extends Component<Props, State> {
   props: Props;
 
   state = {
@@ -25,16 +37,21 @@ export default class Reader extends Component<Props> {
     startY: 0,
     increment: 1,
     images: [],
+    book: {},
     zoom: 1
   };
 
 
   componentDidMount() {
-    this.handleReadDirectory();
+    if (this.props.location.state.open !== undefined) {
+      this.callbackAfterOpen(this.props.location.state.open);
+    } else {
+      this.handleReadDirectory();
+    }
     document.body.addEventListener('keydown', this.keydownhandler.bind(this));
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if ((prevProps.location.state.folderPath === this.props.location.state.folderPath)
       && (this.state.chapter > 0
       || (this.state.index > 0 && this.state.chapter === 0))) {
@@ -42,6 +59,9 @@ export default class Reader extends Component<Props> {
     }
     if (prevProps.location.state.folderPath !== this.props.location.state.folderPath) {
       this.handleReadDirectory();
+    }
+    if (prevState.book.title !== this.state.book.title) {
+      this.setTitle();
     }
   }
 
@@ -57,22 +77,34 @@ export default class Reader extends Component<Props> {
     ImportDirectory((folderPath) => this.callbackAfterOpen(folderPath));
   }
 
+  setTitle() {
+    const title: Array<string> = [];
+    title.push(this.state.book.name || this.state.book.title);
+    if (this.state.book.volume !== '') title.push('volume', this.state.book.volume);
+    if (this.state.book.chapters !== '') title.push('chapter', this.state.book.chapters);
+    document.title = `${title.join(' ')} - Mangas Reader`;
+  }
+
   callbackAfterOpen(folderPath: string) {
     AddBook(folderPath);
-    GetReadingState(folderPath, (readState) => {
+    GetBook(folderPath, (book) => {
       let chapter = 0;
       let index = 0;
-      if (readState !== undefined) {
-        ({ index, chapter } = readState);
+      if (book !== undefined) {
+        this.setState({ book });
+        if (book.reading !== undefined) {
+          ({ index, chapter } = book.reading);
+        }
       }
       this.props.history.push('/reader', { folderPath, chapter, index });
     });
   }
 
   handleReadDirectory() {
-    ReadDirectory(this.props.location.state.folderPath, (files: Array) => {
+    ReadDirectory(this.props.location.state.folderPath, (f?: Array<File>) => {
+      const files: Array<File> = (f !== undefined) ? f : [];
       let notchapters = false;
-      const indchapters = [];
+      const indchapters: Array<number> = [];
       const l = files.length;
       for (let i = 0; i < l; i += 1) {
         if (files[i].type === 'img') {
