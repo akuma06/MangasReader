@@ -3,7 +3,7 @@ import PouchDB from 'pouchdb';
 
 PouchDB.plugin(require('pouchdb-find'));
 
-const db = new PouchDB('library');
+let db = new PouchDB('library');
 
 export type Book = {
   _id: string,
@@ -40,7 +40,7 @@ function GetBooks(callback) {
     .catch((err) => console.log(err));
 }
 
-function AddBook(folderPath) {
+function AddBook(folderPath, done: (book: Book) => void) {
   const title = folderPath.replace(/^.*[\\/]/, '');
   const uniTitle = uniformize(title);
   const name = title.replace(/(.+)(?:(?:v|vol|volume)[ ]*[0-9_\- ]+)+(?:(?:c|ch|chapter)[ ]*[0-9_\- ]+)+.+/i, '$1').replace(/ $/, '');
@@ -52,11 +52,11 @@ function AddBook(folderPath) {
       const document = Object.assign(doc, {
         name, folderPath, volume, chapters, date: new Date().getTime()
       });
-      return db.put(document);
+      return db.put(document).then(() => done(document)).catch(console.log);
     })
     .catch((e) => {
       if (e.status === 404) {
-        return db.put({
+        const document: Book = {
           _id: uniTitle,
           title,
           name,
@@ -68,7 +68,8 @@ function AddBook(folderPath) {
             index: 0
           },
           date: new Date().getTime()
-        });
+        };
+        return db.put(document).then(() => done(document)).catch(console.log);
       }
     });
 }
@@ -100,4 +101,13 @@ function GetBook(folderPath: string, done: (book) => void) {
     });
 }
 
-export { GetBooks, AddBook, UpdateRead, GetBook };
+function EraseBooks(done: () => void) {
+  db.destroy()
+    .then(() => {
+      db = new PouchDB('library');
+      return done();
+    })
+    .catch(console.log);
+}
+
+export { GetBooks, AddBook, UpdateRead, GetBook, EraseBooks };

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
-import { GetBooks, AddBook, Book } from '../utils/Database';
+import { GetBooks, AddBook, Book, EraseBooks } from '../utils/Database';
 import styles from './Home.css';
 import { history } from '../store/configureStore';
 
@@ -14,14 +14,12 @@ type State = {
 
 function openDir() {
   OpenDirectory((folderPath: string) => {
-    AddBook(folderPath);
-    history.push('/reader', { open: folderPath });
+    AddBook(folderPath, () => history.push('/reader', { open: folderPath }));
   });
 }
 function importDir() {
   ImportDirectory((folderPath: string) => {
-    AddBook(folderPath);
-    history.push('/reader', { folderPath });
+    AddBook(folderPath, () => history.push('/reader', { open: folderPath }));
   });
 }
 export default class Home extends Component<Props, State> {
@@ -34,6 +32,11 @@ export default class Home extends Component<Props, State> {
     document.title = 'Accueil - Mangas Reader';
     GetBooks((books: Array<Book>) => {
       this.setState({ books });
+    });
+  }
+  eraseDB() {
+    EraseBooks(() => {
+      this.setState({ books: [] });
     });
   }
   render() {
@@ -56,6 +59,9 @@ export default class Home extends Component<Props, State> {
             <button onClick={importDir}>
               <i className="fa fa-plus-square" />
             Importer Volume...
+            </button>
+            <button onClick={this.eraseDB.bind(this)}>
+              <i className="fa fa-trash" />
             </button>
           </div>
         </div>
