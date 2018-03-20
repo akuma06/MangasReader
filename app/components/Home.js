@@ -1,21 +1,22 @@
 // @flow
+/* eslint no-underscore-dangle: [2, { "allow": ["_id"] }] */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
-import { GetBooks, AddBook } from '../utils/Database';
+import { GetBooks, AddBook, Book } from '../utils/Database';
 import styles from './Home.css';
 import { history } from '../store/configureStore';
 
 type Props = {};
 
 function openDir() {
-  OpenDirectory((folderPath) => {
+  OpenDirectory((folderPath: string) => {
     AddBook(folderPath);
-    history.push('/reader', { folderPath });
+    history.push('/reader', { open: folderPath });
   });
 }
 function importDir() {
-  ImportDirectory((folderPath) => {
+  ImportDirectory((folderPath: string) => {
     AddBook(folderPath);
     history.push('/reader', { folderPath });
   });
@@ -27,7 +28,8 @@ export default class Home extends Component<Props> {
     books: []
   }
   componentDidMount() {
-    GetBooks((books) => {
+    document.title = 'Accueil - Mangas Reader';
+    GetBooks((books: Array<Book>) => {
       this.setState({ books });
     });
   }
@@ -38,9 +40,9 @@ export default class Home extends Component<Props> {
           <h2>Accueil</h2>
           <h4>Derniers chapitres</h4>
           <ul>
-            {this.state.books.map((book) => (
-              <li key={book.id}>
-                <Link key={`link_${book.id}`} to={{ pathname: '/reader', state: { folderPath: book.folderPath } }}>{book.title}</Link>
+            {this.state.books.map((book: Book) => (
+              <li key={book._id}>
+                <Link key={`link_${book._id}`} to={{ pathname: '/reader', state: { open: book.folderPath } }}>{book.title}</Link>
               </li>))}
           </ul>
           <div className={styles.navbuttons}>

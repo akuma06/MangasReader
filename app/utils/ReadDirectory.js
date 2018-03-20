@@ -1,4 +1,14 @@
+// @flow
 import { remote } from 'electron';
+
+type File = {
+  type: 'dir' | 'img',
+  filename: string,
+  files: Array<File> | void,
+  src: string | void,
+  width: number | void,
+  height: number | void
+};
 
 function isImage(filename: string) {
   return filename.match(/(?:bmp|png|gif|jpg|jpeg)$/i);
@@ -8,25 +18,25 @@ function uniformize(filename: string) {
   return filename.replace(/[._\- ]*/g, '');
 }
 
-function walk(dir: string, done: (err, results: Array) => void) {
+function walk(dir: string, done: (err, results?: Array<File>) => void) {
   const fs = remote.require('fs');
   const path = remote.require('path');
   const sizeOf = remote.require('image-size');
-  const results = [];
-  fs.readdir(dir, (err, list: Array) => {
+  const results: Array<File> = [];
+  fs.readdir(dir, (err, list?: Array) => {
     if (err) return done(err);
     let pending = list.length;
-    const images = [];
-    const index = [];
+    const images: Array<string | File> = [];
+    const index: Array<File> = [];
     if (!pending) return done(null, results);
     list.forEach((file: string, i: number) => {
-      const filepath = path.resolve(dir, file);
+      const filepath: string = path.resolve(dir, file);
       fs.stat(filepath, (err2, stat) => {
         if (stat && stat.isDirectory()) {
-          walk(filepath, (err3, res) => {
+          walk(filepath, (err3, res: Array<File>) => {
             results[i] = {
               type: 'dir',
-              name: file,
+              filename: file,
               files: res
             };
             pending -= 1;
@@ -60,6 +70,8 @@ function walk(dir: string, done: (err, results: Array) => void) {
   });
 }
 
-export default function ReadDirectory(folderPath: string, callback) {
+function ReadDirectory(folderPath: string, callback: (res: Array<File>) => void) {
   walk(folderPath, (err, res) => callback(res));
 }
+
+export default { ReadDirectory, File };

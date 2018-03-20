@@ -38,7 +38,6 @@ function OpenDirectory(callback: (folderPath: string) => void) {
   dialog.showOpenDialog((fileNames) => {
     if (fileNames === undefined) return;
     const fileName = fileNames[0];
-
     if (isArchive(fileName)) {
       if (isRar(fileName)) {
         unRar(fileName, fileName.replace(/^.*[\\/]/, ''), callback);
