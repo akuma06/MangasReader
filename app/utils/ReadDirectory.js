@@ -4,13 +4,11 @@ import { remote } from 'electron';
 type File = {
   type: 'dir' | 'img',
   filename: string,
-  files: Files | void,
+  files: Array<File> | void,
   src: string | void,
   width: number | void,
   height: number | void
 };
-
-type Files = Array<File>;
 
 function isImage(filename: string) {
   return filename.match(/(?:bmp|png|gif|jpg|jpeg)$/i);
@@ -20,22 +18,22 @@ function uniformize(filename: string) {
   return filename.replace(/[._\- ]*/g, '');
 }
 
-function walk(dir: string, done: (err, results?: Files) => void) {
+function walk(dir: string, done: (err, results?: Array<File>) => void) {
   const fs = remote.require('fs');
   const path = remote.require('path');
   const sizeOf = remote.require('image-size');
-  const results: Files = [];
+  const results: Array<File> = [];
   fs.readdir(dir, (err, list?: Array) => {
     if (err) return done(err);
     let pending = list.length;
     const images: Array<string | File> = [];
-    const index: Files = [];
+    const index: Array<File> = [];
     if (!pending) return done(null, results);
     list.forEach((file: string, i: number) => {
       const filepath: string = path.resolve(dir, file);
       fs.stat(filepath, (err2, stat) => {
         if (stat && stat.isDirectory()) {
-          walk(filepath, (err3, res: Files) => {
+          walk(filepath, (err3, res: Array<File>) => {
             results[i] = {
               type: 'dir',
               filename: file,
@@ -85,7 +83,7 @@ function haveImages(folder: File) {
   return true;
 }
 
-function filterFolder(files: Files) {
+function filterFolder(files: Array<File>) {
   const l = files.length;
   for (let i = 0; i < l; i += 1) {
     if (files[i].type === 'img') return files;
@@ -98,8 +96,8 @@ function filterFolder(files: Files) {
   return [];
 }
 
-function ReadDirectory(folderPath: string, callback: (res: Files) => void) {
+function ReadDirectory(folderPath: string, callback: (res: Array<File>) => void) {
   walk(folderPath, (err, res) => callback(filterFolder(res)));
 }
 
-export { ReadDirectory, File, Files };
+export { ReadDirectory, File };

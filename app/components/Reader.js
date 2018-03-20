@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { remote } from 'electron';
 import styles from './Reader.css';
-import { ReadDirectory, Files } from '../utils/ReadDirectory';
+import { ReadDirectory, File } from '../utils/ReadDirectory';
 import NavBar from './NavBar';
 import ChapterNav from './ChapterNav';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
@@ -13,7 +13,7 @@ type Props = {
   history: object
 };
 type State = {
-  files: Files,
+  files: Array<File>,
   index: number,
   chapter: number,
   indchapters: Array<number>,
@@ -100,8 +100,8 @@ export default class Reader extends Component<Props, State> {
   }
 
   handleReadDirectory() {
-    ReadDirectory(this.props.location.state.folderPath, (f?: Files) => {
-      const files: Files = (f !== undefined) ? f : [];
+    ReadDirectory(this.props.location.state.folderPath, (f?: Array<File>) => {
+      const files: Array<File> = (f !== undefined) ? f : [];
       let notchapters = false;
       const indchapters: Array<number> = [];
       const l = files.length;
