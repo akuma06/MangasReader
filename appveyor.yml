@@ -1,8 +1,6 @@
 os: unstable
 
 environment:
-  GH_TOKEN:
-      secure: 32904cead45ff43fa6874c1dc48742e17f8e7433
   matrix:
     - nodejs_version: 8
     - nodejs_version: 7
@@ -36,3 +34,9 @@ test_script:
   - yarn test
   - yarn test-e2e
   - yarn dist
+
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: qkp1FTkGahHwOjk4C5RXB6o+HaICmLhE9GoZE0qwQ23KZosaIeTiQj8aWVu66WSK
+  force_update: true
