@@ -102,4 +102,4 @@ function ReadDirectory(folderPath: string, callback: (res: Files) => void) {
   walk(folderPath, (err, res) => callback(filterFolder(res)));
 }
 
-export default { ReadDirectory, File, Files };
+export { ReadDirectory, File, Files };

@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import styles from './ChapterNav.css';
 import ImageNav from './ImageNav';
-import { File } from '../utils/ReadDirectory';
+import { Files } from '../utils/ReadDirectory';
 
 type Props = {
   onchange: (index, chapter) => void,
-  images: Array<File>,
+  images: Files,
   chapters: Array<number>,
   selectedIndex: number,
   selectedChapter: number
