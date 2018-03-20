@@ -70,8 +70,34 @@ function walk(dir: string, done: (err, results?: Array<File>) => void) {
   });
 }
 
-function ReadDirectory(folderPath: string, callback: (res: Array<File>) => void) {
-  walk(folderPath, (err, res) => callback(res));
+function haveImages(folder: File) {
+  if (folder.type === 'dir') {
+    const l = folder.files.length;
+    if (l === 0) return false;
+    if (folder.files[0].type === 'img') return true;
+    for (let i = 0; i < l; i += 1) {
+      if (folder.files[i].type === 'img') return true;
+    }
+    return false;
+  }
+  return true;
 }
 
-export default { ReadDirectory, File };
+function filterFolder(files: Array<File>) {
+  const l = files.length;
+  for (let i = 0; i < l; i += 1) {
+    if (files[i].type === 'img') return files;
+    if (haveImages(files[i])) return files;
+    else if (files[i].type === 'dir') {
+      const newFolder = filterFolder(files[i].files);
+      if (newFolder.length > 0) return files[i].files;
+    }
+  }
+  return [];
+}
+
+function ReadDirectory(folderPath: string, callback: (res: Array<File>) => void) {
+  walk(folderPath, (err, res) => callback(filterFolder(res)));
+}
+
+export { ReadDirectory, File };

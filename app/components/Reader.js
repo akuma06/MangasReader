@@ -6,7 +6,7 @@ import { ReadDirectory, File } from '../utils/ReadDirectory';
 import NavBar from './NavBar';
 import ChapterNav from './ChapterNav';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
-import { AddBook, UpdateRead, GetBook, Book } from '../utils/Database';
+import { AddBook, UpdateRead, Book } from '../utils/Database';
 
 type Props = {
   location: object,
@@ -86,8 +86,7 @@ export default class Reader extends Component<Props, State> {
   }
 
   callbackAfterOpen(folderPath: string) {
-    AddBook(folderPath);
-    GetBook(folderPath, (book) => {
+    AddBook(folderPath, (book) => {
       let chapter = 0;
       let index = 0;
       if (book !== undefined) {

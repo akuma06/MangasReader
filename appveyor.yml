@@ -30,10 +30,9 @@ install:
 test_script:
   - node --version
   - yarn lint
-  - yarn package
+  - yarn dist
   - yarn test
   - yarn test-e2e
-  - yarn dist
 
 deploy:
 - provider: GitHub
