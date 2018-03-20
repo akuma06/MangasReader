@@ -3,25 +3,28 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
-import { GetBooks, AddBook, Book } from '../utils/Database';
+import * as DB from '../utils/Database';
 import styles from './Home.css';
 import { history } from '../store/configureStore';
 
 type Props = {};
+type State = {
+  books: Array<DB.Book>
+};
 
 function openDir() {
   OpenDirectory((folderPath: string) => {
-    AddBook(folderPath);
+    DB.default.AddBook(folderPath);
     history.push('/reader', { open: folderPath });
   });
 }
 function importDir() {
   ImportDirectory((folderPath: string) => {
-    AddBook(folderPath);
+    DB.AddBook(folderPath);
     history.push('/reader', { folderPath });
   });
 }
-export default class Home extends Component<Props> {
+export default class Home extends Component<Props, State> {
   props: Props;
 
   state = {
@@ -29,7 +32,7 @@ export default class Home extends Component<Props> {
   }
   componentDidMount() {
     document.title = 'Accueil - Mangas Reader';
-    GetBooks((books: Array<Book>) => {
+    DB.GetBooks((books: Array<Book>) => {
       this.setState({ books });
     });
   }

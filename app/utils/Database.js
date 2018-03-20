@@ -5,7 +5,7 @@ PouchDB.plugin(require('pouchdb-find'));
 
 const db = new PouchDB('library');
 
-type Book = {
+export type Book = {
   _id: string,
   title: string,
   name: string | void, // since some values can be undefined due to old db
@@ -100,6 +100,4 @@ function GetBook(folderPath: string, done: (book) => void) {
     });
 }
 
-export default {
-  GetBooks, AddBook, UpdateRead, GetBook, Book
-};
+export { GetBooks, AddBook, UpdateRead, GetBook };
