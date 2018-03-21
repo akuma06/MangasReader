@@ -37,5 +37,5 @@ test_script:
 deploy:
 - provider: GitHub
   auth_token:
-    secure: qkp1FTkGahHwOjk4C5RXB6o+HaICmLhE9GoZE0qwQ23KZosaIeTiQj8aWVu66WSK
+    secure: eE3fstnLCm6sbI16LBHMmH13WneOjMtiV+NoYIH8k190OWILp56yAb5CuhioZvq4
   force_update: true
