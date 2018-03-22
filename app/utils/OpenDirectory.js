@@ -1,8 +1,8 @@
 import { remote } from 'electron';
 import decompress from 'decompress';
-import unrar from 'node-unrar-js';
-
+import unrar from '@fknop/node-unrar';
 import path from 'path';
+import { isNull } from 'util';
 
 function isArchive(fileName: string) {
   return fileName.match(/(?:zip|rar)$/i);
@@ -23,13 +23,13 @@ function extractOther(filepath: string, fileName: string, callback: (folderPath:
 
 function unRar(filepath: string, fileName: string, callback: (folderPath: string) => void) {
   const folderPath = path.resolve(remote.app.getPath('documents'), remote.app.getName(), fileName);
-  const archive = unrar.createExtractorFromData(filepath, folderPath);
-  const extracted = archive.extractAll();
-  if (extracted[0].state === 'SUCCESS') {
+  const archive = unrar.extract(filepath, { dest: folderPath }, (err, results) => {
+    if (!isNull(err)) {
+      console.error(err);
+      return;
+    }
     callback(folderPath);
-  } else {
-    console.error('File cannot be extracted');
-  }
+  });
 }
 
 function OpenDirectory(callback: (folderPath: string) => void) {
