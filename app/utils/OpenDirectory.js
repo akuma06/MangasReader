@@ -23,7 +23,7 @@ function extractOther(filepath: string, fileName: string, callback: (folderPath:
 
 function unRar(filepath: string, fileName: string, callback: (folderPath: string) => void) {
   const folderPath = path.resolve(remote.app.getPath('documents'), remote.app.getName(), fileName);
-  const archive = unrar.extract(filepath, { dest: folderPath }, (err, results) => {
+  unrar.extract(filepath, { dest: folderPath }, (err) => {
     if (!isNull(err)) {
       console.error(err);
       return;
