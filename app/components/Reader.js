@@ -7,6 +7,7 @@ import NavBar from './NavBar';
 import ChapterNav from './ChapterNav';
 import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
 import { AddBook, UpdateRead, Book } from '../utils/Database';
+import { settings } from '../settings';
 
 type Props = {
   location: object,
@@ -38,7 +39,7 @@ export default class Reader extends Component<Props, State> {
     increment: 1,
     images: [],
     book: {},
-    zoom: 1
+    zoom: settings.get('zoom')
   };
 
 
@@ -63,6 +64,7 @@ export default class Reader extends Component<Props, State> {
     if (prevState.book.title !== this.state.book.title) {
       this.setTitle();
     }
+    if (prevState.zoom !== this.state.zoom) settings.set('zoom', this.state.zoom)
   }
 
 
@@ -159,7 +161,7 @@ export default class Reader extends Component<Props, State> {
     }
   }
 
-  setIndex(index: number, ch: ?number, z: ?number) {
+  setIndex(index: number, ch?: number, z?: number) {
     let { files } = this.state;
     const chapter: number = (ch !== undefined) ? ch : this.state.chapter;
 

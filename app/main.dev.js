@@ -12,6 +12,7 @@
  */
 import { app, BrowserWindow } from 'electron';
 import MenuBuilder from './menu';
+import { initializeSettings } from './settings';
 
 let mainWindow = null;
 
@@ -83,4 +84,5 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+  initializeSettings();
 });

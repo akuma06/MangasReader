@@ -6,6 +6,7 @@ import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
 import { GetBooks, AddBook, Book, EraseBooks } from '../utils/Database';
 import styles from './Home.css';
 import { history } from '../store/configureStore';
+import { initializeSettings } from '../settings';
 
 type Props = {};
 type State = {
@@ -29,6 +30,7 @@ export default class Home extends Component<Props, State> {
     books: []
   }
   componentDidMount() {
+    initializeSettings();
     document.title = 'Accueil - Mangas Reader';
     GetBooks((books: Array<Book>) => {
       this.setState({ books });
