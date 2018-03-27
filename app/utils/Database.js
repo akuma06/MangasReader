@@ -23,18 +23,25 @@ function uniformize(filename: string) {
   return filename.replace(/[._ ]*/g, '');
 }
 
-function GetBooks(callback) {
-  db.createIndex({
-    index: {
-      fields: ['date']
-    }
-  }).then(() => db.find({
+function GetBooks(
+  callback: (results) => void,
+  options = {
     selector: {
       date: { $gte: null }
     },
     sort: [{ date: 'desc' }],
     limit: 10
-  })
+  }
+) {
+  db.createIndex({
+    index: {
+      fields: ['name']
+    }
+  }).then(() => db.createIndex({
+    index: {
+      fields: ['date']
+    }
+  })).then(() => db.find(options)
     .then((result) => callback(result.docs))
     .catch((err) => console.log(err)))
     .catch((err) => console.log(err));
@@ -110,4 +117,15 @@ function EraseBooks(done: () => void) {
     .catch(console.log);
 }
 
-export { GetBooks, AddBook, UpdateRead, GetBook, EraseBooks };
+function EraseBook(id: string, done: () => void) {
+  db.get(id)
+    .then((doc) => {
+      if (doc === undefined) return;
+      return db.remove(doc)
+        .then(() => done())
+        .catch(console.log);
+    })
+    .catch(console.log);
+}
+
+export { GetBooks, AddBook, UpdateRead, GetBook, EraseBooks, EraseBook };

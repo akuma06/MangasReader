@@ -85,3 +85,4 @@ typings/
 
 /.vscode
 /library*
+.vscode/settings.json

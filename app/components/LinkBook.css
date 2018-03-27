@@ -1,0 +1,24 @@
+.pair {
+    background-color: rgb(240, 239, 239);
+}
+
+.linkbook {
+    border-bottom: 1px solid black;
+    width: 100%;
+    display: block;
+}
+
+.linkbook a, .linkbook span {
+    color: rgb(61, 118, 184);
+    margin: 0.5em 1em;
+    display: inline-block;
+}
+
+.right {
+    float: right;
+}
+
+li button {
+    background: none;
+    border: none;
+}
