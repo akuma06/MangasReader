@@ -47,6 +47,26 @@ function GetBooks(
     .catch((err) => console.log(err));
 }
 
+function GetBooksByName(callback: (results) => void, name: string, limit = undefined, sort = [{ name: 'desc' }]) {
+  db.createIndex({
+    index: {
+      fields: ['name']
+    }
+  }).then(() => db.find({
+    selector: {
+      $and: [
+        { name: { $regex: new RegExp(name, 'i') } },
+        { name: { $gte: null } }
+      ]
+    },
+    sort,
+    limit
+  })
+    .then((result) => callback(result.docs))
+    .catch((err) => console.log(err)))
+    .catch((err) => console.log(err));
+}
+
 function AddBook(folderPath, done: (book: Book) => void) {
   const title = folderPath.replace(/^.*[\\/]/, '');
   const uniTitle = uniformize(title);
@@ -128,4 +148,4 @@ function EraseBook(id: string, done: () => void) {
     .catch(console.log);
 }
 
-export { GetBooks, AddBook, UpdateRead, GetBook, EraseBooks, EraseBook };
+export { GetBooks, GetBooksByName, AddBook, UpdateRead, GetBook, EraseBooks, EraseBook };

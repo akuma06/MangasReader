@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Library from '../components/Library';
 
-type P = {};
+type P = {
+  location: object
+};
 
 class LibraryPage extends Component<P> {
   render() {
     return (
-      <Library />
+      <Library search={this.props.location.search} />
     );
   }
 }
 
-export default LibraryPage;
+export default withRouter(LibraryPage);

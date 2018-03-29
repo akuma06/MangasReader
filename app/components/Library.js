@@ -3,11 +3,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Library.css';
-import { GetBooks, Book, EraseBook } from '../utils/Database';
+import { GetBooksByName, Book, EraseBook } from '../utils/Database';
 import LinkBook from './LinkBook';
 import Pagination from './Pagination';
 
-type P = {};
+type P = {
+  search: string
+};
 
 type S = {
   books: Array<Book>,
@@ -25,11 +27,7 @@ class Library extends Component<P, S> {
   };
 
   componentDidMount() {
-    this.getPageHandler();
-  }
-
-  componentDidUpdate(prevProps: P, prevState: S) {
-    if (prevState.page !== this.state.page) this.getPageHandler(this.state.page);
+    this.getPageHandler(0, this.props.search);
   }
 
   eraseBook(id: string) {
@@ -44,27 +42,38 @@ class Library extends Component<P, S> {
     });
   }
 
-  getPageHandler(page: number = 0) {
-    GetBooks(
+  getPageHandler(page: number = 0, search = '') {
+    GetBooksByName(
       (results: Array<Book>) => {
-        this.setState({ books: results.slice(page * perpage, (page + 1) * perpage), page, total: results.length });
+        this.setState({
+          books: results.slice(page * perpage, (page + 1) * perpage),
+          page,
+          total: results.length
+        });
       },
-      {
-        selector: {
-          name: { $gte: null }
-        },
-        sort: [{ name: 'asc' }]
-      }
+      search
     );
   }
   onPageChangeHandler(page: number) {
-    this.setState({ page });
+    this.getPageHandler(page);
+  }
+
+  onSearchChange(e) {
+    console.log(e.target.value);
+    if (e.target !== undefined) {
+      this.getPageHandler(0, e.target.value);
+    }
   }
 
   render() {
     return (
       <div className={styles.container}>
         <h1>Library</h1>
+        <div>
+          <label htmlFor="search">Search
+            <input type="text" defaultValue={this.props.search} name="search" id="search" onKeyUp={this.onSearchChange.bind(this)} />
+          </label>
+        </div>
         <ul className={styles.listbook}>
           {this.state.books.map((book: Book, ind) => (
             <LinkBook key={`linkb_${book._id}`} book={book} pair={(ind % 2) === 0} onerase={this.eraseBook.bind(this)} />

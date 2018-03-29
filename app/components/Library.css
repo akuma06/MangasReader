@@ -7,6 +7,14 @@
     padding: 1em;
 }
 
+.container label {
+    color: black;
+}
+
+.container label input {
+    margin-left: 5px; 
+}
+
 .container h1 {
     color: steelblue;
     border-bottom: 1px solid black;

@@ -14,17 +14,17 @@ class Pagination extends Component<P> {
   getLinks() {
     const links = [];
     if (this.props.currentPage > 0) {
-      links.push(<a href="#" onClick={this.prevHandler.bind(this)}>&laquo;</a>);
+      links.push(<a href="#" key="page_prev" onClick={this.prevHandler.bind(this)}>&laquo;</a>);
     }
 
     const nbpages = Math.ceil(this.props.items / this.props.perpage);
     for (let i = 0; i < nbpages; i += 1) {
       const className = (i === this.props.currentPage) ? styles.active : '';
-      links.push(<a href="#" onClick={this.onChangeHandler.bind(this)} data-page={i} className={className}>{i + 1}</a>);
+      links.push(<a href="#" key={`page_${i}`} onClick={this.onChangeHandler.bind(this)} data-page={i} className={className}>{i + 1}</a>);
     }
 
     if (this.props.currentPage < (nbpages - 1)) {
-      links.push(<a href="#" onClick={this.nextHandler.bind(this)}>&raquo;</a>);
+      links.push(<a href="#" key="page_next" onClick={this.nextHandler.bind(this)}>&raquo;</a>);
     }
     return links;
   }
