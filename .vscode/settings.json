@@ -1,6 +1,7 @@
 {
   "javascript.validate.enable": false,
   "flow.useNPMPackagedFlow": true,
+  "editor.snippetSuggestions": "top",
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,

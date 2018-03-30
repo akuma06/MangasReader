@@ -1,0 +1,34 @@
+.container {
+    width: 100%;
+    margin: auto;
+    max-width: 900px;
+    height: 100%;
+    background: white;
+    padding: 1em;
+}
+
+.container label {
+    color: black;
+}
+
+.container label input {
+    margin-left: 5px; 
+}
+
+.container h1 {
+    color: steelblue;
+    border-bottom: 1px solid black;
+}
+
+.listbook {
+    list-style: none;
+    padding: 0;
+}
+
+body div {
+    height: auto;
+}
+
+.center {
+    text-align: center;
+}
