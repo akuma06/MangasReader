@@ -1,7 +1,7 @@
 {
   "name": "manga-reader",
   "productName": "Manga Reader",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Application to read easily offline mangas.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
