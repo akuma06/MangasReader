@@ -1,0 +1,35 @@
+.container {
+  width: 100%;
+  margin: auto;
+  max-width: 900px;
+  height: 100%;
+  background: white;
+  padding: 1em;
+}
+
+.container label {
+  color: black;
+}
+
+.container label input {
+  margin-left: 5px; 
+}
+
+.container h1 {
+  color: steelblue;
+  border-bottom: 1px solid black;
+}
+.container h1 button {
+  background: none;
+  border: 0;
+  font-size: 1em;
+  color: darkblue;
+  cursor: pointer;
+}
+body div {
+  height: auto;
+}
+
+.center {
+  text-align: center;
+}

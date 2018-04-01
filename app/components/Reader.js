@@ -64,7 +64,7 @@ export default class Reader extends Component<Props, State> {
     if (prevState.book.title !== this.state.book.title) {
       this.setTitle();
     }
-    if (prevState.zoom !== this.state.zoom) settings.set('zoom', this.state.zoom)
+    if (prevState.zoom !== this.state.zoom) settings.set('zoom', this.state.zoom);
   }
 
 

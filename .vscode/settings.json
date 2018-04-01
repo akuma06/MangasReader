@@ -2,6 +2,7 @@
   "javascript.validate.enable": false,
   "flow.useNPMPackagedFlow": true,
   "editor.tabSize": 2,
+  "editor.snippetSuggestions": "top",
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,

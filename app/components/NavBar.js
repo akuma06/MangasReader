@@ -80,6 +80,12 @@ export default class Reader extends Component<Props> {
           <button onClick={this.handlePlus.bind(this)}>
             <i className="fa fa-search-plus" />
           </button>
+          <span className={styles.separator}>&nbsp;</span>
+          <Link to="/settings">
+            <button>
+              <i className="fa fa-cog" />
+            </button>
+          </Link>
         </div>
       </div>
     );

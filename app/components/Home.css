@@ -9,13 +9,16 @@
   border-radius: 1em;
   padding: 1em;
 }
-
+.listbook {
+  list-style: none;
+  padding: 0;
+}
 .container h2 {
   font-size: 5rem;
   border-bottom: 2px solid gray;
 }
 
-.container a {
+.container a, .container button {
   font-size: 1.4rem;
 }
 
@@ -30,4 +33,8 @@
 
 .navbuttons button i {
   margin-right: 3px;
+}
+
+.right {
+  float: right;
 }

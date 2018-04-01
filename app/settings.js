@@ -1,9 +1,9 @@
+// @flow
 import { isObject } from 'util';
 
-// @flow
 const settings = require('electron-settings');
 
-type Settings = {
+export type Settings = {
   zoom: number,
   version: number
 };
@@ -13,8 +13,30 @@ const DEFAULTS: Settings = {
   version: 2
 };
 
+export type Param = {
+  interface: string,
+  label: string,
+  type: string,
+  params: { [x: string]: any }
+};
+
+const settingsParam: {
+  [key: string]: Param
+} = {
+  zoom: {
+    interface: 'input',
+    label: 'Zoom',
+    type: 'number',
+    params: {
+      min: '0',
+      max: '10',
+      step: '0.1'
+    }
+  }
+};
+
 function initializeSettings() {
-  if (settings.getAll().length == 0) {
+  if (settings.getAll().length === 0) {
     settings.setAll(DEFAULTS);
   } else if (settings.get('version', 0) < DEFAULTS.version) {
     const updateSettings = update(DEFAULTS, settings.getAll());
@@ -32,4 +54,4 @@ function update(from: object, to = {}) {
   return returnObj;
 }
 
-export { settings, initializeSettings };
+export { settings, initializeSettings, DEFAULTS, settingsParam };
