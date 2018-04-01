@@ -1,7 +1,7 @@
 {
   "name": "manga-reader",
   "productName": "manga-reader",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Application to read easily offline mangas.",
   "main": "./main.prod.js",
   "author": {
