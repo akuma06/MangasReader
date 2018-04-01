@@ -5,12 +5,14 @@ import App from './containers/App';
 import HomePage from './containers/HomePage';
 import ReaderPage from './containers/ReaderPage';
 import LibraryPage from './containers/LibraryPage';
+import SettingsPage from './containers/SettingsPage';
 
 export default () => (
   <App>
     <Switch>
       <Route path="/library" component={LibraryPage} />
       <Route path="/reader" component={ReaderPage} />
+      <Route path="/settings" component={SettingsPage} />
       <Route path="/" component={HomePage} />
     </Switch>
   </App>

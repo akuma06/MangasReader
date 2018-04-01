@@ -34,3 +34,7 @@
 .navbuttons button i {
   margin-right: 3px;
 }
+
+.right {
+  float: right;
+}

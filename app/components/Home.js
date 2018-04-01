@@ -7,6 +7,7 @@ import { OpenDirectory, ImportDirectory } from '../utils/OpenDirectory';
 import { GetBooks, AddBook, Book, EraseBooks, EraseBook } from '../utils/Database';
 import styles from './Home.css';
 import { history } from '../store/configureStore';
+import { initializeSettings } from '../settings';
 import LinkBook from './LinkBook';
 
 type Props = {};
@@ -31,6 +32,7 @@ export default class Home extends Component<Props, State> {
     books: []
   }
   componentDidMount() {
+    initializeSettings();
     document.title = 'Accueil - Mangas Reader';
     GetBooks((books: Array<Book>) => {
       this.setState({ books });
@@ -65,7 +67,14 @@ export default class Home extends Component<Props, State> {
     return (
       <div className={styles.container} data-tid="container">
         <div>
-          <h2>Accueil</h2>
+          <h2>
+            Accueil
+            <span className={styles.right}>
+              <Link to="/settings">
+                <i className="fa fa-cog" />
+              </Link>
+            </span>
+          </h2>
           <h4>Derniers chapitres</h4>
           <ul className={styles.listbook}>
             {this.state.books.map((book: Book, ind) => (
